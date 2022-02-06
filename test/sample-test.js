@@ -26,16 +26,29 @@ describe("NFTMarket", function () {
     // pass in tokenId of the nft deployment
     // pass the auction price in metic currenncy
     await market.createMarketItem(nftContractAddress, 1, auctionPrice, {value: listingPrice});
-    await market.createMarketItem(nftContractAddress, 1, auctionPrice, {value: listingPrice});
+    await market.createMarketItem(nftContractAddress, 2, auctionPrice, {value: listingPrice});
 
     // skip first address because the initial address used is for deployment accounts
     // we skip the first address using the underscore when instiating the array
     // we dont want the buyer to also to be the seller
     const[_ , buyerAddress] = await ethers.getSigners();
 
-    await market.connect(buyerAddress).createMarketItem(nftContractAddress, 1, {value: auctionPrice});
+    //use buyer address to connect to market
+    await market.connect(buyerAddress).createMarketSale(nftContractAddress, 1, {value: auctionPrice});
 
-    const items = await market.fetchMarketItems();
+    let items = await market.fetchMarketItems();
+
+    items = await Promise.all(items.map(async i => {
+      const tokenUri = await nft.tokenURI(i.tokenId)
+      let item = {
+        price: i.price.toString(),
+        tokenId: i.tokenId.toString(),
+        seller: i.seller,
+        owner: i.owner,
+        tokenUri
+      }
+      return item;
+    }));
 
     console.log('items: ', items);
   });
