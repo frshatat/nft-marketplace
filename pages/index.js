@@ -22,6 +22,7 @@ export default function Home() {
   useEffect(() => {
     loadNFTs()
   }, [])
+  
   async function loadNFTs() {    
     const provider = new ethers.providers.JsonRpcProvider(rpcEndpoint)
     const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider)
