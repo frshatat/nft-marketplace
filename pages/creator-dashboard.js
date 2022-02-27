@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { ethers } from 'ethers'
 import { create as ipfsHttpClient } from 'ipfs-http-client'
-import {axios} from 'axios';
+import axios from 'axios'
 import Web3Modal from 'web3modal'
 import {nftmarketaddress , nftaddress} from '../config';
 import NFT from '../artifacts/contracts/NFT.sol/NFT.json';
